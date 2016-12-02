@@ -1,24 +1,3 @@
-#required 
-# import pygame
-# pygame.init();
-
-# #create a surface
-# gameDisplay = pygame.display.set_mode((800,600)) #initialize with a tuple
-
-# #lets add a title, aka "caption"
-# pygame.display.set_caption("Events")
-
-# #pygame.display.flip() 		#similar to a flip book, updates entire surface
-# pygame.display.update()		#only updates portion specified
-
-
-# gameExit = False
-# while not gameExit:
-# 	for event in pygame.event.get():
-# 		print(event)
-
-# # Dig for gold
-# # Based on Whack-a-mole game using pygame by Kimberly Todd
 
 from pygame import *
 from pygame.sprite import *
@@ -42,12 +21,14 @@ class Drake(Sprite):
         self.rect.center = (randX,randY)
 
 class Poop(Sprite):
+
     def __init__(self):
         Sprite.__init__(self)
         self.image = image.load("poop.bmp")
         self.rect = self.image.get_rect()
 
     # move gold to a new random location
+
     def move(self):
         randX = randint(0, 600)
         randY = randint(0, 400)
@@ -92,12 +73,15 @@ level = 1
 score_to_next_level = 5
 time.set_timer(USEREVENT + 1, DELAY)
 
+mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+
 # loop until user quits
 while True:
     e = event.poll()
     if e.type == QUIT:
         quit()
         break
+
     elif e.type == MOUSEBUTTONDOWN:
         if hellokitty.hit(drake):
             mixer.Sound("cha-ching.wav").play()
@@ -109,7 +93,6 @@ while True:
             
     elif e.type == USEREVENT + 1: # TIME has passed
         drake.move()
-
 
     elif e.type == MOUSEBUTTONDOWN:
         if hellokitty.hit(drake):
@@ -124,14 +107,20 @@ while True:
 
     if(level ==2):
         bgcolor = (255,255,255)
+        sprites.add(poop)
+
     elif(level == 3):
-        bgcolor = (0,0,0)
+        bgcolor = (255,0,0)
+
     elif(level ==4):
         bgcolor = (0,255,0)
-    elif (level> 4):
+   
+    elif (level== 5):
         bgcolor = (0,0,255)
 
-
+    elif (level >5):
+        bgcolor = (255,0,255)
+      
     if(hits >= score_to_next_level):
         level +=1
         score_to_next_level = score_to_next_level*2
@@ -139,13 +128,13 @@ while True:
     # refill background color so that we can paint sprites in new locations
     screen.fill(bgcolor)
     t = f.render("Current Score = " + str(hits) + " Level = " + str(level), False, (0,0,0))
-    screen.blit(t, (320, 0))        # draw text to screen.  Can you move it?
+    screen.blit(t, (320, 0))       
 
     # update and redraw sprites
     sprites.update()
     sprites.draw(screen)
     display.update()
-
+    
 #required
 pygame.quit()
 quit()				#exits python
